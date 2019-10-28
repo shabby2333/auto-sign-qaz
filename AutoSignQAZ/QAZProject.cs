@@ -16,6 +16,7 @@ namespace AutoSignQAZ
         private static readonly string LOGIN_URL = QAZ_BASE_URL + "/auth/login";
         private static readonly string SIGN_IN_URL = QAZ_BASE_URL + "/user/checkin";
 
+        [Newtonsoft.Json.JsonIgnore()]
         public readonly HttpUtil httpUtil = new HttpUtil();
 
         public static event Action<string, int, string> LoginStatusEvent;
