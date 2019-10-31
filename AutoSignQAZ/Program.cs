@@ -16,7 +16,7 @@ namespace AutoSignQAZ
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new AutoSignQAZMainForm());
+            Application.Run(mainForm: new AutoSignQAZMainForm());
         }
     }
 }

@@ -43,6 +43,8 @@
             this.columnUnusedTraffic = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnTraffic = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnLoginStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.menuUserAccount = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuItemDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.listViewEventLog = new System.Windows.Forms.ListView();
             this.columnLogTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnLogType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -51,6 +53,7 @@
             this.columnLogMsg = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.timerSignIn = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
+            this.menuUserAccount.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -129,11 +132,17 @@
             this.columnUnusedTraffic,
             this.columnTraffic,
             this.columnLoginStatus});
+            this.listViewUserAccount.ContextMenuStrip = this.menuUserAccount;
+            this.listViewUserAccount.FullRowSelect = true;
+            this.listViewUserAccount.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.listViewUserAccount.HideSelection = false;
+            this.listViewUserAccount.LabelWrap = false;
             this.listViewUserAccount.Location = new System.Drawing.Point(12, 76);
+            this.listViewUserAccount.MultiSelect = false;
             this.listViewUserAccount.Name = "listViewUserAccount";
             this.listViewUserAccount.Size = new System.Drawing.Size(515, 171);
             this.listViewUserAccount.TabIndex = 1;
+            this.listViewUserAccount.TabStop = false;
             this.listViewUserAccount.UseCompatibleStateImageBehavior = false;
             this.listViewUserAccount.View = System.Windows.Forms.View.Details;
             // 
@@ -161,6 +170,20 @@
             // 
             this.columnLoginStatus.Text = "状态";
             this.columnLoginStatus.Width = 46;
+            // 
+            // menuUserAccount
+            // 
+            this.menuUserAccount.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemDelete});
+            this.menuUserAccount.Name = "menuUserAccount";
+            this.menuUserAccount.Size = new System.Drawing.Size(181, 48);
+            // 
+            // menuItemDelete
+            // 
+            this.menuItemDelete.Name = "menuItemDelete";
+            this.menuItemDelete.Size = new System.Drawing.Size(180, 22);
+            this.menuItemDelete.Text = "删除";
+            this.menuItemDelete.Click += new System.EventHandler(this.MenuItemDelete_Click);
             // 
             // listViewEventLog
             // 
@@ -223,6 +246,7 @@
             this.Load += new System.EventHandler(this.AutoSignQAZMainForm_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.menuUserAccount.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -249,6 +273,8 @@
         private System.Windows.Forms.ColumnHeader columnLogTime;
         private System.Windows.Forms.Timer timerSignIn;
         private System.Windows.Forms.Button btnRefreshUser;
+        private System.Windows.Forms.ContextMenuStrip menuUserAccount;
+        private System.Windows.Forms.ToolStripMenuItem menuItemDelete;
     }
 }
 

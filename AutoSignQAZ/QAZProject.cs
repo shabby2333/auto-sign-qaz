@@ -76,12 +76,14 @@ namespace AutoSignQAZ
 
         public async Task<bool> Sign()
         {
+            if (!this.LoginStatus)
+                return false;
 
             try
             {
                 HttpResponseMessage response = await httpUtil.PostFormAsync(SIGN_IN_URL, new Dictionary<string, string>
                 {
-                });
+                }).ConfigureAwait(false);
 
                 if (!(response.StatusCode == HttpStatusCode.OK))
                 {
