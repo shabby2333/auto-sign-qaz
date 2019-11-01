@@ -16,12 +16,14 @@ namespace AutoSignQAZ
     public partial class AutoSignQAZMainForm : Form
     {
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
-        private List<QAZProject> projects = new List<QAZProject>();
+        private Config config;
 
         public AutoSignQAZMainForm()
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             InitializeComponent();
+
+            //Init();
         }
 
         private void Init()
@@ -33,7 +35,9 @@ namespace AutoSignQAZ
             //加载配置文件
             if (File.Exists("./config.json"))
             {
-                projects = JsonConvert.DeserializeObject<List<QAZProject>>(File.ReadAllText("./config.json"));
+                config = JsonConvert.DeserializeObject<Config>(File.ReadAllText("./config.json"));
+                if (config == null) config = new Config();
+                if (config.Users == null) config.Users = new List<QAZProject>();
                 RefreshUserView();
 
             }
@@ -41,7 +45,26 @@ namespace AutoSignQAZ
 
         public void SaveConfig()
         {
-            File.WriteAllText("./config.json", JsonConvert.SerializeObject(projects));
+
+            this.config.CheckInterval = (String.IsNullOrEmpty(textBoxCheckInterval.Text)
+                || Int32.TryParse(textBoxCheckInterval.Text, out int checkInterval))
+                ? 30 : checkInterval % 3600;
+            this.config.DelaySignModeSwitch = checkBoxDelaySignMode.Checked;
+            this.config.DelaySignModeTime = (String.IsNullOrEmpty(textBoxDelaySignModeTime.Text)
+                || Int32.TryParse(textBoxDelaySignModeTime.Text, out int delaySignModeTime))
+                ? 8 : delaySignModeTime % 24;
+            this.config.Proxy = textBoxProxy.Text;
+
+            this.timerSignIn.Interval = this.config.CheckInterval * 60 * 1000;
+            if (!String.IsNullOrEmpty(this.config.Proxy))
+            {
+                this.config.Users.ForEach(new Action<QAZProject>(user =>
+                {
+                    user.httpUtil.httpClientHandler.Proxy = new WebProxy(this.config.Proxy);
+                }));
+            }
+
+            File.WriteAllText("./config.json", JsonConvert.SerializeObject(config));
             //MessageBox.Show("配置保存成功");
         }
 
@@ -53,12 +76,12 @@ namespace AutoSignQAZ
                 return;
             }
 
-            foreach (var project in projects)
+            foreach (var user in config.Users)
             {
-                if (project.Email == textBoxEmail.Text)
+                if (user.Email == textBoxEmail.Text)
                 {
-                    project.Password = textBoxPassword.Text;
-                    _ = await project.Login();
+                    user.Password = textBoxPassword.Text;
+                    _ = await user.Login();
                     SaveConfig();
                     _ = MessageBox.Show(this, "账户已存在 已更新密码", "操作完成~", MessageBoxButtons.OK);
                     RefreshUserView();
@@ -72,7 +95,7 @@ namespace AutoSignQAZ
 
 
             //_ = await project1.Sign();
-            projects.Add(project1);
+            config.Users.Add(project1);
             SaveConfig();
             RefreshUserView();
 
@@ -112,19 +135,19 @@ namespace AutoSignQAZ
 
         private async void TimerSignIn_Tick(object sender, EventArgs e)
         {
-            if (projects.Count == 0)
+            if (config.Users.Count == 0 || (config.DelaySignModeSwitch && config.DelaySignModeTime > DateTime.Now.Hour))
                 return;
 
-            bool signInFlag = false;
-            var users = new List<QAZProject>(projects.AsEnumerable<QAZProject>());
+            bool signFlag = false;
+            var users = new List<QAZProject>(config.Users.AsEnumerable<QAZProject>());
             foreach (var user in users)
             {
                 if (!user.LoginStatus)
                     _ = await user.Login().ConfigureAwait(true);
-                if (!signInFlag && user.LastSignTime.Day < DateTime.Now.Day)
+                if (!signFlag && user.LastSignTime.Day != DateTime.Now.Day)
                 {
                     _ = await user.Sign().ConfigureAwait(true);
-                    signInFlag = true;
+                    signFlag = true;
                 }
 
             }
@@ -137,9 +160,14 @@ namespace AutoSignQAZ
         {
             _ = this.BeginInvoke(new Action(() =>
               {
+                  textBoxCheckInterval.Text = config.CheckInterval.ToString();
+                  textBoxDelaySignModeTime.Text = config.DelaySignModeTime.ToString();
+                  textBoxProxy.Text = config.Proxy;
+                  checkBoxDelaySignMode.Checked = config.DelaySignModeSwitch;
+
                   listViewUserAccount.Items.Clear();
 
-                  foreach (var user in projects)
+                  foreach (var user in config.Users)
                   {
                       ListViewItem item = new ListViewItem();
                       item.Text = user.Email;
@@ -171,11 +199,11 @@ namespace AutoSignQAZ
             for (int i = 0; i < listViewUserAccount.SelectedItems.Count; i++)
             {
                 bool flag = false;
-                for (int j = 0; j < projects.Count; j++)
+                for (int j = 0; j < config.Users.Count; j++)
                 {
-                    if (listViewUserAccount.SelectedItems[i].Text == projects[j].Email)
+                    if (listViewUserAccount.SelectedItems[i].Text == config.Users[j].Email)
                     {
-                        projects.RemoveAt(j);
+                        config.Users.RemoveAt(j);
                         flag = true;
                         break;
                     }
@@ -184,6 +212,11 @@ namespace AutoSignQAZ
             }
 
             RefreshUserView();
+            SaveConfig();
+        }
+
+        private void btnSaveConfig_Click(object sender, EventArgs e)
+        {
             SaveConfig();
         }
     }

@@ -47,7 +47,7 @@ namespace AutoSignQAZ
                     { "passwd", Password },
                     { "code", "" },
                     {"remember_me", "week" }
-                });
+                }).ConfigureAwait(false);
                 if (!(response.StatusCode == HttpStatusCode.OK))
                 {
                     return false;
@@ -93,7 +93,7 @@ namespace AutoSignQAZ
                 }
 
 
-                var body = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(await response.Content.ReadAsStringAsync());
+                var body = Newtonsoft.Json.JsonConvert.DeserializeObject<JObject>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
                 Console.WriteLine(body.ToString());
                 var ret = body.Value<int>("ret");
                 var msg = body.Value<string>("msg");

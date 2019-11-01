@@ -13,7 +13,7 @@ namespace AutoSignQAZ.Util
         private static readonly string UA = "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9) Gecko/2008052906 Firefox/3.0";
 
         private readonly HttpClient httpClient;
-        private readonly HttpClientHandler httpClientHandler;
+        public readonly HttpClientHandler httpClientHandler;
         private readonly CookieContainer cookieContainer;
 
         public HttpUtil()
