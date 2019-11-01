@@ -31,12 +31,12 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AutoSignQAZMainForm));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.btnAddUser = new System.Windows.Forms.Button();
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxEmail = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnRefreshConfig = new System.Windows.Forms.Button();
             this.listViewUserAccount = new System.Windows.Forms.ListView();
             this.columnEmail = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnLastSignTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -80,16 +80,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "添加账户";
             // 
-            // btnRefreshConfig
-            // 
-            this.btnRefreshConfig.Location = new System.Drawing.Point(237, 45);
-            this.btnRefreshConfig.Name = "btnRefreshConfig";
-            this.btnRefreshConfig.Size = new System.Drawing.Size(75, 23);
-            this.btnRefreshConfig.TabIndex = 5;
-            this.btnRefreshConfig.Text = "刷新";
-            this.btnRefreshConfig.UseVisualStyleBackColor = true;
-            this.btnRefreshConfig.Click += new System.EventHandler(this.BtnRefreshUser_Click);
-            // 
             // btnAddUser
             // 
             this.btnAddUser.Location = new System.Drawing.Point(104, 76);
@@ -131,6 +121,16 @@
             this.label1.Size = new System.Drawing.Size(47, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "账户名:";
+            // 
+            // btnRefreshConfig
+            // 
+            this.btnRefreshConfig.Location = new System.Drawing.Point(237, 45);
+            this.btnRefreshConfig.Name = "btnRefreshConfig";
+            this.btnRefreshConfig.Size = new System.Drawing.Size(75, 23);
+            this.btnRefreshConfig.TabIndex = 5;
+            this.btnRefreshConfig.Text = "刷新";
+            this.btnRefreshConfig.UseVisualStyleBackColor = true;
+            this.btnRefreshConfig.Click += new System.EventHandler(this.BtnRefreshUser_Click);
             // 
             // listViewUserAccount
             // 
@@ -214,32 +214,33 @@
             // columnLogTime
             // 
             this.columnLogTime.Text = "时间";
-            this.columnLogTime.Width = 124;
+            this.columnLogTime.Width = 125;
             // 
             // columnLogType
             // 
             this.columnLogType.Text = "操作";
+            this.columnLogType.Width = 50;
             // 
             // columnLogEmail
             // 
             this.columnLogEmail.Text = "账户名";
-            this.columnLogEmail.Width = 85;
+            this.columnLogEmail.Width = 121;
             // 
             // columnLogRet
             // 
             this.columnLogRet.Text = "返回码";
-            this.columnLogRet.Width = 52;
+            this.columnLogRet.Width = 55;
             // 
             // columnLogMsg
             // 
             this.columnLogMsg.Text = "信息";
-            this.columnLogMsg.Width = 200;
+            this.columnLogMsg.Width = 162;
             // 
             // timerSignIn
             // 
             this.timerSignIn.Enabled = true;
             this.timerSignIn.Interval = 180000;
-            this.timerSignIn.Tick += new System.EventHandler(this.TimerSignIn_Tick);
+            this.timerSignIn.Tick += new System.EventHandler(this.TimerSign_Tick);
             // 
             // groupBox2
             // 
@@ -261,9 +262,9 @@
             // 
             // textBoxProxy
             // 
-            this.textBoxProxy.Location = new System.Drawing.Point(53, 20);
+            this.textBoxProxy.Location = new System.Drawing.Point(131, 20);
             this.textBoxProxy.Name = "textBoxProxy";
-            this.textBoxProxy.Size = new System.Drawing.Size(259, 21);
+            this.textBoxProxy.Size = new System.Drawing.Size(181, 21);
             this.textBoxProxy.TabIndex = 7;
             // 
             // label5
@@ -271,9 +272,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 23);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(41, 12);
+            this.label5.Size = new System.Drawing.Size(119, 12);
             this.label5.TabIndex = 6;
-            this.label5.Text = "代理: ";
+            this.label5.Text = "代理(仅支持HTTP) : ";
             // 
             // btnSaveConfig
             // 
